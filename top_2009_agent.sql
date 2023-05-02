@@ -1,7 +1,10 @@
-SELECT MAX(I.Total) AS `TOTAL SALES`,
-E.FirstName || ' ' || E.LastName AS `fullName`
-From Employee e 
-JOIN Customer c On c.SupportRepId = e.EmployeeId
-JOIN Invoice i ON i.customerId = c.customerId
-WHERE e.title = "Sales Support Agent" and strftime('%Y', InvoiceDate) = '2009'
-ORDER BY e.employeeId
+
+    SELECT MAX(total_sales), fullName
+    FROM (
+        SELECT SUM(Total) AS total_sales, E.FirstName || ' ' || E.LastName AS `fullName`
+        FROM Invoice i 
+        JOIN Employee e On c.SupportRepId = e.EmployeeId
+        JOIN Customer c ON i.customerId = c.customerId
+        WHERE i.InvoiceDate LIKE '%2009%'
+        GROUP BY e.EmployeeId
+    )
